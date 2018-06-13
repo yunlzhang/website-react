@@ -48,7 +48,6 @@ class Index extends Component{
             }
             // mode:'cors'
         })
-        .then(res => res.json())
         .then(res => {
             this.setState({
                 data:res.article_data,

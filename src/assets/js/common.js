@@ -1,5 +1,14 @@
 import { throttle} from 'throttle-debounce';
 
+function formatParams(data){
+    let temp = [];
+    Object.keys(data).forEach((item,index) => {
+        temp.push(`${item}=${data[item]}`);
+    })
+
+    return temp.join('&');
+}
+
 function toggleShowReturn(){
     document.addEventListener('scroll',throttle(200,function(){
         if(document.documentElement.scrollTop > window.innerHeight){
@@ -19,12 +28,19 @@ let customFetch = data => {
     if(data.method.toLowerCase() === 'post'){
         return fetch(data.url,{
             method:'POST',
-            body:JSON.stringify(data.params)
+            mode:"cors",
+            headers:{
+                "Content-type":'application/x-www-form-urlencoded'
+            },
+            credentials: 'include',
+            body:formatParams(data.params)
         })
+        .then(response => response.json())
     }else{
         return fetch(data.url + dealParams(data.params),{
             method:'GET'
         })
+        .then(response => response.json())
     }
 
 
