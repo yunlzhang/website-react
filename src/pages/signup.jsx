@@ -1,78 +1,136 @@
-import React, { Component } from 'react'
-import styles from '../scss/signup.scss';
-import CSSModules from 'react-css-modules';
-class Signup extends Component{
-    constructor(){
+import React, {Component} from 'react';
+import '../scss/signup.scss';
+
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/lib/ReactCrop.scss';
+
+class Signup extends Component {
+    constructor() {
         super();
         this.state = {
             name: '',
             password: '',
             repassword: '',
             intro: '',
-            avatar: ''
+            avatar: '',
+            src: null,
+            crop: {
+                x: 10,
+                y: 10,
+                width: 80,
+                height: 80
+            }
         }
 
         this.changeHandler = this.changeHandler.bind(this);
-
+        this.onSelectFile = this.onSelectFile.bind(this);
+        this.onImageLoaded = this.onImageLoaded.bind(this);
+        this.onCropComplete = this.onCropComplete.bind(this);
+        this.onCropChange = this.onCropChange.bind(this);
+        
     }
 
-    changeHandler(e){
+    changeHandler(e) {
         this.setState({
-            [e.currentTarget.name]:e.currentTarget.value
+            [e.currentTarget.name]: e.currentTarget.value
         })
     }
 
-    signup(){
-        let {
-            name,
-            password,
-            intro,
-            avatar
-        } = this.state;
+    signup() {
+        let {name, password, intro, avatar} = this.state;
 
     }
 
+    onSelectFile (e){
+        if (e.target.files && e.target.files.length > 0) {
+            const reader = new FileReader()
+            reader.addEventListener(
+                'load',
+                () => this.setState({src: reader.result}),
+                false
+            )
+            reader.readAsDataURL(e.target.files[0])
+        }
+    }
 
-    render(){
+    onImageLoaded (image){
+        console.log('onCropComplete', image)
+    }
+
+    onCropComplete(crop){
+        console.log('onCropComplete', crop)
+    }
+
+    onCropChange (crop) {
+        this.setState({crop})
+    }
+
+    render() {
         return (
-            <div styleName="signup-wrap">
-                <div styleName="signup">
-                    <div styleName="avatar">
-                        {/* <svg v-if="!signupData.avatar" styleName="icon" aria-hidden="true">
-                            <use xlink:href="#icon-xiugaigerentouxiang-"></use>
-                        </svg>
-                        <img v-else :src="signupData.avatar" alt="">
-                        <input type="file" @change="cropAvatar" title="上传喜欢的头像"> */}
+            <div className="signup-wrap">
+                <div className="signup">
+                    <div className="avatar">
+                        <input type="file" onChange={this.onSelectFile}/> {
+                            this.state.src && (
+                                <ReactCrop
+                                    src={this.state.src}
+                                    crop={this.state.crop}
+                                    onImageLoaded={this.onImageLoaded}
+                                    onComplete={this.onCropComplete}
+                                    onChange={this.onCropChange}/>
+                            )
+                        }
                     </div>
                     <div className="username">
-                        <div styleName="l">昵称</div>
-                        <div styleName="r">
-                            <input type="text" value={this.state.name} placeholder="请输入昵称" name="name" onChange={this.changeHandler}/>
+                        <div className="l">昵称</div>
+                        <div className="r">
+                            <input
+                                type="text"
+                                value={this.state.name}
+                                placeholder="请输入昵称"
+                                name="name"
+                                onChange={this.changeHandler}/>
                         </div>
                     </div>
                     <div >
-                        <div styleName="l">密码</div>
-                        <div styleName="r">
-                            <input type="password" value={this.state.password} name="password" placeholder="请输入密码，6-10位" onChange={this.changeHandler} />
+                        <div className="l">密码</div>
+                        <div className="r">
+                            <input
+                                type="password"
+                                value={this.state.password}
+                                name="password"
+                                placeholder="请输入密码，6-10位"
+                                onChange={this.changeHandler}/>
                         </div>
                     </div>
                     <div>
-                        <div styleName="l">确认密码</div>
-                        <div styleName="r">
-                            <input type="password" value={this.state.repassword} name="repassword" placeholder="请再次输入密码" onChange={this.changeHandler}/>
+                        <div className="l">确认密码</div>
+                        <div className="r">
+                            <input
+                                type="password"
+                                value={this.state.repassword}
+                                name="repassword"
+                                placeholder="请再次输入密码"
+                                onChange={this.changeHandler}/>
                         </div>
                     </div>
-                    <div styleName="intro">
-                        <div styleName="l">简介</div>
-                        <div styleName="r">
-                            <textarea name="intro" value={this.state.intro} max-length="100" placeholder="简单介绍一下～不要超过100字哦" onChange={this.changeHandler}/>
+                    <div className="intro">
+                        <div className="l">简介</div>
+                        <div className="r">
+                            <textarea
+                                name="intro"
+                                value={this.state.intro}
+                                max-length="100"
+                                placeholder="简单介绍一下～不要超过100字哦"
+                                onChange={this.changeHandler}/>
                         </div>
                     </div>
-                    <div styleName="confirm" onClick={this.signup}>注册</div>
+                    <div className="confirm" onClick={this.signup}>注册</div>
                 </div>
-            </div> 
+                {/* <ReactCrop src="path/to/image.jpg" /> */}
+            </div>
         )
     }
 }
 
-export default CSSModules(Signup,styles);
+export default Signup;

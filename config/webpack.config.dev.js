@@ -152,9 +152,10 @@ module.exports = {
 					//scss compile
 					{
 						test: /\.scss$/,
+						exclude: path.resolve(__dirname, 'src/scss'),
 						use: [
 							"style-loader", // creates style nodes from JS strings
-							"css-loader?modules&importLoaders=1&localIdentName=[name]-[hash:base64:5]", // translates CSS into CommonJS
+							"css-loader", // translates CSS into CommonJS
 							"sass-loader" // compiles Sass to CSS
 						]
 					},
