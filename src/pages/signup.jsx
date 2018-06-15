@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import '../scss/signup.scss';
+import {customFetch} from '../assets/js/common';
 
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
@@ -22,6 +23,7 @@ class Signup extends Component {
             }
         }
 
+        this.signup = this.signup.bind(this);
         this.changeHandler = this.changeHandler.bind(this);
         this.onSelectFile = this.onSelectFile.bind(this);
         this.onImageLoaded = this.onImageLoaded.bind(this);
@@ -36,9 +38,22 @@ class Signup extends Component {
         })
     }
 
-    signup() {
+    signup () {
         let {name, password, intro, avatar} = this.state;
 
+        customFetch({
+            url:'//localhost:8083/signup',
+            method:'POST',
+            params:{
+                name,
+                password,
+                intro,
+                avatar
+            }
+        })
+        .then(res => {
+            console.log(res);
+        })
     }
 
     onSelectFile (e){
