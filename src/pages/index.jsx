@@ -40,7 +40,7 @@ class Index extends Component{
     }
     componentWillMount(){
         customFetch({
-            url:'//localhost:8083/article/get_index_data',
+            url:window.requestHost + '/article/get_index_data',
             method:'GET',
             params:{
                 num:5,

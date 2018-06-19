@@ -26,7 +26,7 @@ class Signin extends Component{
     signin(){
         let {name,password} = this.state;
         customFetch({
-            url:'//localhost:8083/signin',
+            url:window.requestHost + '/signin',
             method:'POST',
             params:{
                 name,
