@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import { Pagination } from 'antd';
-
+import {Link} from 'react-router-dom';
 import {customFetch} from '../assets/js/common';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
 
 import '../scss/index.scss';
+console.log(Link)
 
 function List(props){
     return (
         <li className="article-item">
-            <a href="/article/5afec3f2311ffd38209cb23b" >
+            <Link to={'/article/'+ props.data._id} >
                 <div className="title">
                     <span data-v-4c6a1119="">{props.data.title}</span>
                 </div>
@@ -22,7 +23,7 @@ function List(props){
                     <span><svg aria-hidden="true" className="icon"><use xlinkHref="#icon-iconfontpinglun"></use></svg> {props.data.comments_count}</span>
                     <span><svg aria-hidden="true" className="icon"><use xlinkHref="#icon-fangwenliang"></use></svg> {props.data.pv}</span>
                 </div>
-            </a>
+            </Link>
         </li>
     )
 }

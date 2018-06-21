@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import '../scss/signup.scss';
-import {customFetch} from '../assets/js/common';
-
-import ReactCrop from 'react-image-crop';
+import {customFetch,upQiniu} from '../assets/js/common';
+import uuidv1 from 'uuid/v1';
+import ReactCrop , { makeAspectCrop,getPixelCrop} from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
 
 class Signup extends Component {
@@ -15,27 +15,90 @@ class Signup extends Component {
             intro: '',
             avatar: '',
             src: null,
+            image:'',
             crop: {
                 x: 10,
                 y: 10,
-                width: 80,
-                height: 80
+                width: 40,
+                height: 40,
+                aspect:1
             }
         }
 
         this.signup = this.signup.bind(this);
         this.changeHandler = this.changeHandler.bind(this);
         this.onSelectFile = this.onSelectFile.bind(this);
-        this.onImageLoaded = this.onImageLoaded.bind(this);
         this.onCropComplete = this.onCropComplete.bind(this);
+        this.onImageLoaded = this.onImageLoaded.bind(this);
         this.onCropChange = this.onCropChange.bind(this);
-        
+        this.cancelCrop = this.cancelCrop.bind(this);
+        this.confirmCrop = this.confirmCrop.bind(this);
+
     }
 
     changeHandler(e) {
         this.setState({
             [e.currentTarget.name]: e.currentTarget.value
         })
+    }
+
+    cancelCrop(){
+        this.setState({
+            src:'',
+            image:''
+        })
+    }
+    onImageLoaded(image){
+        this.setState({
+            image,
+            crop: makeAspectCrop({
+              x: 0,
+              y: 0,
+              aspect:1,
+              width: 40,
+            }, image.width / image.height),
+        });
+    }
+
+    confirmCrop(){
+        this.getImgBlob().then(res =>{
+            upQiniu('avatar',res).then(res => {
+                console.log(res);
+            });
+        });
+    }
+    async getImgBlob()  {
+        function getCroppedImg(image, pixelCrop, fileName) {
+            const canvas = document.createElement('canvas');
+            canvas.width = pixelCrop.width;
+            canvas.height = pixelCrop.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(
+              image,
+              pixelCrop.x,
+              pixelCrop.y,
+              pixelCrop.width,
+              pixelCrop.height,
+              0,
+              0,
+              pixelCrop.width,
+              pixelCrop.height
+            );
+          
+            // As Base64 string
+            // const base64Image = canvas.toDataURL('image/jpeg');
+            
+            
+            // As a blob
+            return new Promise((resolve, reject) => {
+              canvas.toBlob(file => {
+                file.name = fileName;
+                resolve(file);
+              }, 'image/jpeg');
+            });
+        }
+        const croppedImg = await getCroppedImg(this.state.image, getPixelCrop(this.state.image,this.state.crop), 'avatar/'+uuidv1());
+        return croppedImg;
     }
 
     signup () {
@@ -68,12 +131,11 @@ class Signup extends Component {
         }
     }
 
-    onImageLoaded (image){
-        console.log('onCropComplete', image)
-    }
-
     onCropComplete(crop){
-        console.log('onCropComplete', crop)
+        console.log(crop)
+        // this.setState({
+        //     crop
+        // })
     }
 
     onCropChange (crop) {
@@ -85,16 +147,8 @@ class Signup extends Component {
             <div className="signup-wrap">
                 <div className="signup">
                     <div className="avatar">
-                        <input type="file" onChange={this.onSelectFile}/> {
-                            this.state.src && (
-                                <ReactCrop
-                                    src={this.state.src}
-                                    crop={this.state.crop}
-                                    onImageLoaded={this.onImageLoaded}
-                                    onComplete={this.onCropComplete}
-                                    onChange={this.onCropChange}/>
-                            )
-                        }
+                        <input type="file" onChange={this.onSelectFile}/> 
+                        
                     </div>
                     <div className="username">
                         <div className="l">昵称</div>
@@ -142,7 +196,22 @@ class Signup extends Component {
                     </div>
                     <div className="confirm" onClick={this.signup}>注册</div>
                 </div>
-                {/* <ReactCrop src="path/to/image.jpg" /> */}
+                {   
+                    this.state.src && (
+                        <div className="crop-wrap">
+                            <div className="buttons">
+                                <div className="confirm" onClick={this.confirmCrop}>确定</div>
+                                <div className="cancel" onClick={this.cancelCrop}>取消</div>
+                            </div>
+                            <ReactCrop
+                            src={this.state.src}
+                            crop={this.state.crop}
+                            onImageLoaded={this.onImageLoaded}
+                            onComplete={this.onCropComplete}
+                            onChange={this.onCropChange}/>
+                        </div>
+                    )
+                }
             </div>
         )
     }
