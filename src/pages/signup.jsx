@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Avatar } from 'antd';
 import '../scss/signup.scss';
 import {customFetch,upQiniu} from '../assets/js/common';
 import uuidv1 from 'uuid/v1';
@@ -28,7 +29,6 @@ class Signup extends Component {
         this.signup = this.signup.bind(this);
         this.changeHandler = this.changeHandler.bind(this);
         this.onSelectFile = this.onSelectFile.bind(this);
-        this.onCropComplete = this.onCropComplete.bind(this);
         this.onImageLoaded = this.onImageLoaded.bind(this);
         this.onCropChange = this.onCropChange.bind(this);
         this.cancelCrop = this.cancelCrop.bind(this);
@@ -63,7 +63,12 @@ class Signup extends Component {
     confirmCrop(){
         this.getImgBlob().then(res =>{
             upQiniu('avatar',res).then(res => {
-                console.log(res);
+                let avatar = process.env.NODE_ENV === 'development' ? (window.requestHost + res.img) : 'https://image.lcddjm.com/'+res.key
+                this.setState({
+                    avatar,
+                    src:'',
+                    image:''
+                })
             });
         });
     }
@@ -128,15 +133,16 @@ class Signup extends Component {
                 false
             )
             reader.readAsDataURL(e.target.files[0])
+            e.target.value = '';
         }
     }
 
-    onCropComplete(crop){
-        console.log(crop)
-        // this.setState({
-        //     crop
-        // })
-    }
+    // onCropComplete(crop){
+    //     console.log(crop)
+    //     // this.setState({
+    //     //     crop
+    //     // })
+    // }
 
     onCropChange (crop) {
         this.setState({crop})
@@ -147,8 +153,11 @@ class Signup extends Component {
             <div className="signup-wrap">
                 <div className="signup">
                     <div className="avatar">
-                        <input type="file" onChange={this.onSelectFile}/> 
-                        
+                        {this.state.avatar && (
+                            <img src={this.state.avatar} alt=""/>
+                        )}
+                        <Avatar size="large" icon="user" />
+                        <input type="file" onChange={this.onSelectFile} title="选择一个你喜欢的图片当作头像吧～～"/> 
                     </div>
                     <div className="username">
                         <div className="l">昵称</div>
@@ -207,7 +216,6 @@ class Signup extends Component {
                             src={this.state.src}
                             crop={this.state.crop}
                             onImageLoaded={this.onImageLoaded}
-                            onComplete={this.onCropComplete}
                             onChange={this.onCropChange}/>
                         </div>
                     )

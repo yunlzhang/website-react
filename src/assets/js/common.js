@@ -54,7 +54,7 @@ let customFetch = data => {
     }
 }
 
-let upQiniu =  async function(name,file){
+let upQiniu =  async function(path,file){
     if(['[object Blob]','[object File]'].indexOf(Object.prototype.toString.call(file)) === -1){
         throw new TypeError('file must be a file');
     }
@@ -66,11 +66,12 @@ let upQiniu =  async function(name,file){
         uptoken = res.uptoken;
     });
     
-    formData.append('key',name+uuidv1());
+    formData.append('key',path+uuidv1());
     formData.append('file',file);
+    formData.append('path',path);
     formData.append('token',uptoken);
 
-    return await fetch('//upload.qiniup.com/',{
+    return await fetch(process.env.NODE_ENV === 'development' ? '//localhost:8083/upload' : '//upload.qiniup.com/',{
         method:'POST',
         body:formData,
         mode:'cors'

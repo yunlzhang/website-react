@@ -5,9 +5,9 @@ import {customFetch} from '../assets/js/common';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
+import Skeleton from '../components/skeleton';
 
 import '../scss/index.scss';
-console.log(Link)
 
 function List(props){
     return (
@@ -68,9 +68,15 @@ class Index extends Component{
                 <div className="main-wrap">
                     <ul className="article-lists">
                         {
-                            this.state.data.map((item,index) => {
-                                return <List key={index} data={item}/>
-                            })
+                            this.state.data.length ? (
+                                this.state.data.map((item,index) => {
+                                    return <List key={index} data={item}/>
+                                })
+                            ) : (
+                                '11111'.split('').map((item,index) => {
+                                    return <Skeleton key={index}/>;
+                                })
+                            )
                         }
                     </ul>
                 </div>
