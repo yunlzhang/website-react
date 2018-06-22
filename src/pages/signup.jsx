@@ -107,7 +107,7 @@ class Signup extends Component {
     }
 
     signup () {
-        let {name, password, intro, avatar} = this.state;
+        let {name, password, intro, avatar,repassword} = this.state;
 
         customFetch({
             url:window.requestHost + '/signup',
@@ -115,6 +115,7 @@ class Signup extends Component {
             params:{
                 name,
                 password,
+                repassword,
                 intro,
                 avatar
             }

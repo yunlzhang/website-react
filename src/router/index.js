@@ -1,6 +1,5 @@
 import React from 'react';
 
-import createBrowserHistory from 'history/createBrowserHistory'
 import asyncComponent from '../components/AsyncComponent'
 
 import { Provider } from 'react-redux'
@@ -12,7 +11,6 @@ const Signin = asyncComponent(() => import("../pages/signin"))
 const Signup = asyncComponent(() => import("../pages/signup"))
 const NotFind = asyncComponent(() => import("../pages/notFind"))
 const Detail = asyncComponent(() => import("../pages/detail"))
-
 
 const Root = ({store})=> (
     <Provider store={store}>

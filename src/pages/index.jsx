@@ -7,6 +7,9 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import Skeleton from '../components/skeleton';
 
+import {connect} from 'react-redux'
+
+
 import '../scss/index.scss';
 
 function List(props){
@@ -27,11 +30,19 @@ function List(props){
         </li>
     )
 }
-@autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
-class Index extends Component{
-    constructor(){
-        super();
 
+function loginInfo(store) {
+    return {
+        isLogin:store.userStore.isLogin
+    }
+}
+
+@autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
+@connect(loginInfo)
+class Index extends Component{
+    constructor(props){
+        super(props);
+        console.log(this);
         this.state = {
             pageSize:20,
             data:[],
@@ -45,6 +56,11 @@ class Index extends Component{
     }
     pageChange(page){
         this.fetchData(page-1);
+    }
+
+    componentDidMount(){
+
+        console.log(this.props)
     }
 
     fetchData(pageIndex){
