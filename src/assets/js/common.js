@@ -66,7 +66,7 @@ let upQiniu =  async function(path,file){
         uptoken = res.uptoken;
     });
     
-    formData.append('key',path+uuidv1());
+    formData.append('key',path+'/'+uuidv1());
     formData.append('file',file);
     formData.append('path',path);
     formData.append('token',uptoken);
