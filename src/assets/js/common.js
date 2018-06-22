@@ -40,7 +40,8 @@ let customFetch = data => {
         .then(response => response.json())
     }else{
         return fetch(data.url + dealParams(data.params),{
-            method:'GET'
+            method:'GET',
+            credentials: "include"
         })
         .then(response => response.json())
     }
