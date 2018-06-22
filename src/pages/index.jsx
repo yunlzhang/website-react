@@ -34,7 +34,8 @@ class Index extends Component{
 
         this.state = {
             pageSize:20,
-            data:[]
+            data:[],
+            pageIndex:0
         }
 
         this.pageChange = this.pageChange.bind(this);
@@ -62,7 +63,8 @@ class Index extends Component{
         .then(res => {
             this.setState({
                 data:res.article_data,
-                pageSize:res.article_length
+                pageSize:res.article_length,
+                pageIndex
             })
         })
 
@@ -88,7 +90,7 @@ class Index extends Component{
                         }
                     </ul>
                 </div>
-                <Pagination defaultCurrent={1}  pageSize={5} total={this.state.pageSize}  onChange={this.pageChange}/>
+                <Pagination  current={this.state.pageIndex+1} pageSize={5} total={this.state.pageSize}  onChange={this.pageChange}/>
                 <Footer/>
             </div>
         )
