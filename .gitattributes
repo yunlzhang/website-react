@@ -1,4 +1,4 @@
-*.css linguist-language=javascript
-*.scss linguist-language=javascript
-*.js linguist-language=javascript
-*.html linguist-language=javascript
+*.css linguist-language=JavaScript
+*.scss linguist-language=JavaScript
+*.js linguist-language=JavaScript
+*.html linguist-language=JavaScript
