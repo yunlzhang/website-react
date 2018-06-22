@@ -17,10 +17,15 @@ class Detail extends Component {
     }
 
     componentWillMount(){
+        this.fetchData(this.props.match.params.id)
+    }
+
+
+    fetchData(id){
         customFetch({
             url:window.requestHost + '/article/get_article_detail',
             params:{
-                _id:this.props.match.params.id
+                _id:id
             }
         })
         .then(res => {
@@ -32,11 +37,22 @@ class Detail extends Component {
             })
         })
     }
+
+    componentDidMount(){
+
+        console.log(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.match.params.id !== this.props.match.params.id){
+            this.fetchData(nextProps.match.params.id)
+        }
+    }
+
     createMarkup() {
         return {__html: this.state.articleData.content};
     }
       
-
     render() {
         return (
             <div>

@@ -11,7 +11,15 @@ import './scss/normalize.scss';
 import './assets/css/antd.css'
 import './index.scss'
 
+import { createStore } from 'redux'
+import rootReducer from './redux/reducers'
+
+const store = createStore(rootReducer)
+
+
 window.requestHost = process.env.NODE_ENV === 'development' ? 'http://localhost:8083' : 'https://api.lcddjm.com';
 
-ReactDOM.render(<Root/>, document.getElementById('root'));
+ReactDOM.render(
+    <Root store={store}/>
+    ,document.getElementById('root'));
 registerServiceWorker();

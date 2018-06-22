@@ -33,19 +33,29 @@ class Index extends Component{
         super();
 
         this.state = {
-            pageSize:100,
+            pageSize:20,
             data:[]
         }
 
         this.pageChange = this.pageChange.bind(this);
     }
     componentWillMount(){
+        this.fetchData(0);
+    }
+    pageChange(page){
+        this.fetchData(page-1);
+    }
+
+    fetchData(pageIndex){
+        this.setState({
+            data:[]
+        })
         customFetch({
             url:window.requestHost + '/article/get_index_data',
             method:'GET',
             params:{
                 num:5,
-                page:0
+                page:pageIndex
             }
             // mode:'cors'
         })
@@ -55,8 +65,6 @@ class Index extends Component{
                 pageSize:res.article_length
             })
         })
-    }
-    pageChange(page){
 
     }
 
@@ -80,7 +88,7 @@ class Index extends Component{
                         }
                     </ul>
                 </div>
-                <Pagination defaultCurrent={1} total={this.state.pageSize}  onChange={this.pageChange}/>
+                <Pagination defaultCurrent={1}  pageSize={5} total={this.state.pageSize}  onChange={this.pageChange}/>
                 <Footer/>
             </div>
         )
