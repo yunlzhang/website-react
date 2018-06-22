@@ -11,7 +11,7 @@ const NotFind = asyncComponent(() => import("../pages/notFind"))
 const Detail = asyncComponent(() => import("../pages/detail"))
 const history = createBrowserHistory()
 
-const RouterConfig = (
+const Root = ()=> (
     <Router  history={history}>
         <Switch>
             <Route exact path="/" component={Index}/>
@@ -23,5 +23,5 @@ const RouterConfig = (
     </Router>
 )
 
-export default () => (RouterConfig);
+export default Root;
 //参考：https://stackoverflow.com/questions/34130539/uncaught-error-invariant-violation-element-type-is-invalid-expected-a-string
