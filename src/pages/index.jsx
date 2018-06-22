@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Pagination } from 'antd';
 import {Link} from 'react-router-dom';
 import {customFetch} from '../assets/js/common';
-
+import { autobind } from 'core-decorators';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Skeleton from '../components/skeleton';
@@ -27,7 +27,7 @@ function List(props){
         </li>
     )
 }
-
+@autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
 class Index extends Component{
     constructor(){
         super();
@@ -38,7 +38,7 @@ class Index extends Component{
             pageIndex:0
         }
 
-        this.pageChange = this.pageChange.bind(this);
+        // this.pageChange = this.pageChange;
     }
     componentWillMount(){
         this.fetchData(0);

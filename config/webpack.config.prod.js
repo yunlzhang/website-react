@@ -147,7 +147,7 @@ module.exports = {
 						include: paths.appSrc,
 						loader: require.resolve('babel-loader'),
 						options: {
-
+							"presets": ["react-native-stage-0/decorator-support"],
 							compact: true,
 						},
 					},
