@@ -2,9 +2,21 @@ import React, { Component } from 'react';
 import {customFetch} from '../assets/js/common';
 import {withRouter} from 'react-router-dom';
 import { autobind } from 'core-decorators';
+import {loginIn,loginOut} from '../redux/actions/login';
 
+import {connect} from 'react-redux'
 import '../scss/signin.scss';
 
+const mapStateToProps = state => {
+    return state;
+};
+
+const mapDispatchToProps = {
+    loginIn,
+    loginOut
+};
+
+@connect(mapStateToProps,mapDispatchToProps)
 @autobind
 class Signin extends Component{
     constructor(){
@@ -22,6 +34,7 @@ class Signin extends Component{
 
     signin(){
         let {name,password} = this.state;
+        let {loginIn} = this.props;
         customFetch({
             url:window.requestHost + '/signin',
             method:'POST',
@@ -32,9 +45,10 @@ class Signin extends Component{
         })
         .then(res => {
             if(res.code === 200){
-
+                loginIn(res.data);
+            }else{
+                loginOut();
             }
-            console.log(res);
         })
     }
     render(){

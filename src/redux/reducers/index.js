@@ -1,6 +1,10 @@
 import { combineReducers } from 'redux'
 
 import loginReducers from './loginReducers';
+
+import {msg} from './message';
+
 export default combineReducers({
-	loginReducers
+	loginInfo:loginReducers,
+	msg
 })

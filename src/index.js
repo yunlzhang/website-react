@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
-import Root from './router/index';
+import App from './router/index';
 import registerServiceWorker from './registerServiceWorker';
 import './assets/iconfont/iconfont'
 import './assets/js/common'
@@ -10,6 +10,7 @@ import './assets/js/common'
 import './scss/normalize.scss';
 import './assets/css/antd.css'
 import './index.scss'
+
 
 import { createStore , applyMiddleware} from 'redux'
 import rootReducer from './redux/reducers'
@@ -30,6 +31,6 @@ const store = createStore(
 
 window.requestHost = process.env.NODE_ENV === 'development' ? 'http://localhost:8083' : 'https://api.lcddjm.com';
 ReactDOM.render(
-    <Root store={store}/>
+    <App store={store}/>
     ,document.getElementById('root'));
 registerServiceWorker();

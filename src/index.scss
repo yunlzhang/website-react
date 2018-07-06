@@ -1,9 +1,19 @@
 @import './scss/index.scss';
+/* 覆盖antd原有样式 */
 
 .ant-pagination{
     display: flex;
     justify-content: center;
 }
+
+.ant-alert-error,.ant-alert-success{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+
 .return-top{
     position: fixed;
     display: none;

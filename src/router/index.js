@@ -1,11 +1,17 @@
 import React,{Component} from 'react';
 
+import { Alert } from 'antd';
+
+
 import asyncComponent from '../components/AsyncComponent'
 
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route,Switch} from 'react-router-dom'
 
 import {fetchUserInfo} from '../redux/actions/login';
+import {alert,close} from '../redux/actions/msg';
+
+
 import { autobind } from 'core-decorators';
 import {connect} from 'react-redux'
 const Index = asyncComponent(() => import("../pages/index"))
@@ -30,10 +36,14 @@ const Root = ({store})=> (
 
 
 const mapStateToProps = state => {
-    return state;
+    return {
+        msg:state.msg
+    };
 };
 const mapDispatchToProps = {
-    fetchUserInfo
+    fetchUserInfo,
+    alert,
+    close
 };
 
 @connect(mapStateToProps,mapDispatchToProps)
@@ -44,12 +54,31 @@ class App extends Component{
     // }
     componentDidMount(){
         this.props.fetchUserInfo();
+        console.log(this.props)
+        setTimeout(()=>{
+            this.props.alert({
+                type:'success',
+                text:'hahahahha'
+            })
+
+            setTimeout(()=>{
+                this.props.alert({
+                    type:'error',
+                    text:'hahahahha'
+                })
+            },2000)
+        })
     }
 
     render(){
-        let {store} = this.props;
+        let {store,msg,close} = this.props;
         return(
-            <Root store={store}></Root>
+            <div>
+                <Root store={store}></Root>
+                {
+                    msg.type && <Alert type={msg.type} message={msg.text} banner closable onClose={close}/>
+                }
+            </div>
         )
     }
 }

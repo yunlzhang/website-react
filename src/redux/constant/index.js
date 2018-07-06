@@ -1,4 +1,6 @@
 export default {
     LOGIN_IN:"LOGIN_IN",
-    LOGIN_OUT:"LOGIN_OUT"
+    LOGIN_OUT:"LOGIN_OUT",
+    SUCCESS_MSG:"SUCCESS_MSG",
+    ERROR_MSG:"ERROR_MSG"
 }

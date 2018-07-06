@@ -5,16 +5,13 @@ const loginReducers = (state = {isLogin:false},action) => {
     switch(type){
         case types.LOGIN_IN:
             return { 
-                ...state,
-                loginInfo:payload,
+                userInfo:payload,
                 isLogin:true
             };
 
         case types.LOGIN_OUT:
             return { 
-                ...state,
-                loginInfo:payload,
-                isLogin:true
+                isLogin:false
             };
         default: 
             return state;

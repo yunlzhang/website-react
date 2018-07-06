@@ -12,14 +12,14 @@ let createAction = (type, payload) => {
 
 let fetchUserInfo = () => (dispatch) => {
     customFetch({
-        url:window.requestHost + '/get_userinfo',
+        url:window.requestHost + '/get_user_info',
         method:'GET',
     })
     .then(res => {
         if(res.code === 200){
             dispatch(createAction(types.LOGIN_IN,res.data))
         }else{
-            dispatch(createAction(types.LOGIN_IN))
+            dispatch(createAction(types.LOGIN_OUT))
         }
     })
 }
