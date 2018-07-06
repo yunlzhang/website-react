@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import { Pagination } from 'antd';
 import {Link} from 'react-router-dom';
 import {customFetch} from '../assets/js/common';
-import { autobind } from 'core-decorators';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Skeleton from '../components/skeleton';
-
-import {connect} from 'react-redux'
-
+import { autobind } from 'core-decorators';
 
 import '../scss/index.scss';
 
@@ -31,13 +28,6 @@ function List(props){
     )
 }
 
-function loginInfo(store) {
-    return {
-        isLogin:store.userStore.isLogin
-    }
-}
-
-@connect(loginInfo)
 @autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
 class Index extends Component{
     constructor(props){
