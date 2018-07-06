@@ -16,7 +16,7 @@ class Detail extends Component {
         this.createMarkup = this.createMarkup.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.fetchData(this.props.match.params.id)
     }
 
@@ -38,10 +38,6 @@ class Detail extends Component {
         })
     }
 
-    componentDidMount(){
-
-        console.log(this);
-    }
 
     componentWillReceiveProps(nextProps){
         if(nextProps.match.params.id !== this.props.match.params.id){

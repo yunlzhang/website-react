@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import { Avatar } from 'antd';
+
+import {withRouter} from 'react-router-dom';
 import '../scss/signup.scss';
 import {customFetch,upQiniu} from '../assets/js/common';
 import uuidv1 from 'uuid/v1';
 import ReactCrop , { makeAspectCrop,getPixelCrop} from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
+import { autobind } from 'core-decorators';
 
+
+@autobind
 class Signup extends Component {
     constructor() {
         super();
@@ -26,13 +31,13 @@ class Signup extends Component {
             }
         }
 
-        this.signup = this.signup.bind(this);
-        this.changeHandler = this.changeHandler.bind(this);
-        this.onSelectFile = this.onSelectFile.bind(this);
-        this.onImageLoaded = this.onImageLoaded.bind(this);
-        this.onCropChange = this.onCropChange.bind(this);
-        this.cancelCrop = this.cancelCrop.bind(this);
-        this.confirmCrop = this.confirmCrop.bind(this);
+        // this.signup = this.signup.bind(this);
+        // this.changeHandler = this.changeHandler.bind(this);
+        // this.onSelectFile = this.onSelectFile.bind(this);
+        // this.onImageLoaded = this.onImageLoaded.bind(this);
+        // this.onCropChange = this.onCropChange.bind(this);
+        // this.cancelCrop = this.cancelCrop.bind(this);
+        // this.confirmCrop = this.confirmCrop.bind(this);
 
     }
 
@@ -121,7 +126,11 @@ class Signup extends Component {
             }
         })
         .then(res => {
-            console.log(res);
+            if(res.code === 200){
+                this.props.history.push("/signin");
+            }else{
+                alert(res.message);
+            }
         })
     }
 
@@ -226,4 +235,4 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+export default withRouter(Signup);

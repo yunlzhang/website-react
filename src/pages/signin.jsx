@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {customFetch} from '../assets/js/common';
-// import CSSModules from 'react-css-modules';
+import {withRouter} from 'react-router-dom';
+import { autobind } from 'core-decorators';
 
 import '../scss/signin.scss';
-// import styles from '../scss/signin.scss';
 
-
+@autobind
 class Signin extends Component{
     constructor(){
         super();
@@ -13,9 +13,6 @@ class Signin extends Component{
             name:'',
             password:''
         }
-
-        this.changeHandler = this.changeHandler.bind(this);
-        this.signin = this.signin.bind(this);
     }
     changeHandler(e){
         this.setState({
@@ -34,6 +31,9 @@ class Signin extends Component{
             }
         })
         .then(res => {
+            if(res.code === 200){
+
+            }
             console.log(res);
         })
     }
@@ -58,4 +58,4 @@ class Signin extends Component{
     }
 }
 
-export default Signin;
+export default withRouter(Signin);

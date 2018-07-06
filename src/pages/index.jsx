@@ -37,30 +37,23 @@ function loginInfo(store) {
     }
 }
 
-@autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
 @connect(loginInfo)
+@autobind//装饰器 参考：https://github.com/jayphelps/core-decorators
 class Index extends Component{
     constructor(props){
         super(props);
-        console.log(this);
         this.state = {
             pageSize:20,
             data:[],
             pageIndex:0
         }
-
-        // this.pageChange = this.pageChange;
     }
-    componentWillMount(){
+    componentDidMount(){
         this.fetchData(0);
     }
+
     pageChange(page){
         this.fetchData(page-1);
-    }
-
-    componentDidMount(){
-
-        console.log(this.props)
     }
 
     fetchData(pageIndex){
