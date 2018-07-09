@@ -54,7 +54,6 @@ class App extends Component{
     // }
     componentDidMount(){
         this.props.fetchUserInfo();
-        console.log(this.props)
         setTimeout(()=>{
             this.props.alert({
                 type:'success',

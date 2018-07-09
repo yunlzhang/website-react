@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
 import { Avatar } from 'antd';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter,Redirect} from 'react-router-dom';
 import '../scss/signup.scss';
 import {customFetch,upQiniu} from '../assets/js/common';
 import uuidv1 from 'uuid/v1';
 import ReactCrop , { makeAspectCrop,getPixelCrop} from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
 import { autobind } from 'core-decorators';
+import {connect} from 'react-redux'
 
 
+const mapStateToProps = state => {
+    return state;
+};
+
+@connect(mapStateToProps)
 @autobind
 class Signup extends Component {
     constructor() {
@@ -159,6 +165,14 @@ class Signup extends Component {
     }
 
     render() {
+
+        let {isLogin} = this.props.loginInfo;
+        if(isLogin){
+            return (
+                <Redirect to="/"/>
+            )
+        }
+
         return (
             <div className="signup-wrap">
                 <div className="signup">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {customFetch} from '../assets/js/common';
-import {withRouter} from 'react-router-dom';
+import {withRouter,Redirect} from 'react-router-dom';
 import { autobind } from 'core-decorators';
 import {loginIn,loginOut} from '../redux/actions/login';
 
@@ -52,6 +52,13 @@ class Signin extends Component{
         })
     }
     render(){
+        
+        let {isLogin} = this.props.loginInfo;
+        if(isLogin){
+            return (
+                <Redirect to="/"/>
+            )
+        }
         return (
             <div  className="signin-wrap">
                 <div className="signin">
