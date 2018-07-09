@@ -80,9 +80,15 @@ let upQiniu =  async function(path,file){
         return response.json();
     });
 }
+let parseDom = function (str) {
+	　　 var objE = document.createElement("div");
+	　　 objE.innerHTML = str;
+	　　 return objE.childNodes;
+}
 
 export {
     toggleShowReturn,
     customFetch,
-    upQiniu
+    upQiniu,
+    parseDom
 }

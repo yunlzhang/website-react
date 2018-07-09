@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import Footer from '../components/footer';
-import {customFetch} from '../assets/js/common';
+import {customFetch,parseDom} from '../assets/js/common';
 import '../scss/detail.scss';
+
+import '../assets/css/vs2015.css'
+import hljs from '../assets/js/highlight.min';
 
 class Detail extends Component {
     constructor(props){
@@ -17,9 +20,22 @@ class Detail extends Component {
     }
 
     componentDidMount(){
-        this.fetchData(this.props.match.params.id)
+        this.fetchData(this.props.match.params.id);
+
+
     }
 
+    componentDidUpdate(){
+        let pres = document.querySelectorAll('pre');
+        for(let i = 0,len = pres.length;i<len;i++){
+            let str = pres[i].innerHTML;
+            let newNode = parseDom('<pre><code>'+str+'</code></pre>');
+            pres[i].parentNode.replaceChild(newNode[0],pres[i])
+        }
+        document.querySelectorAll('pre code').forEach((item,index) => {
+            hljs.highlightBlock(item);
+        })   
+    }
 
     fetchData(id){
         customFetch({
