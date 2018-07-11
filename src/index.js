@@ -8,7 +8,8 @@ import './assets/js/common'
 
 // css
 import './scss/normalize.scss';
-import './assets/css/antd.css'
+import './assets/css/antd.css';
+import './assets/css/draft.css'
 import './index.scss'
 
 

@@ -4,6 +4,7 @@ import { Alert } from 'antd';
 
 
 import asyncComponent from '../components/AsyncComponent'
+import Header from '../components/header';
 
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route,Switch} from 'react-router-dom'
@@ -19,20 +20,8 @@ const Signin = asyncComponent(() => import("../pages/signin"))
 const Signup = asyncComponent(() => import("../pages/signup"))
 const NotFind = asyncComponent(() => import("../pages/notFind"))
 const Detail = asyncComponent(() => import("../pages/detail"))
+const Edit = asyncComponent(() => import("../pages/edit"));
 
-const Root = ({store})=> (
-    <Provider store={store}>
-        <Router >
-            <Switch>
-                <Route exact path="/" component={Index}/>
-                <Route path="/signin" component={Signin}/>
-                <Route path="/signup" component={Signup}/>  
-                <Route path="/article/:id" component={Detail}/>          
-                <Route path='*' exact={true} component={NotFind} />
-            </Switch>
-        </Router>
-    </Provider>
-)
 
 
 const mapStateToProps = state => {
@@ -54,30 +43,29 @@ class App extends Component{
     // }
     componentDidMount(){
         this.props.fetchUserInfo();
-        setTimeout(()=>{
-            this.props.alert({
-                type:'success',
-                text:'hahahahha'
-            })
-
-            setTimeout(()=>{
-                this.props.alert({
-                    type:'error',
-                    text:'hahahahha'
-                })
-            },2000)
-        })
     }
 
     render(){
         let {store,msg,close} = this.props;
         return(
-            <div>
-                <Root store={store}></Root>
-                {
-                    msg.type && <Alert type={msg.type} message={msg.text} banner closable onClose={close}/>
-                }
-            </div>
+            <Provider store={store}>
+                <Router >
+                    <div className="root-wrap">
+                        <Header/>
+                        <Switch>
+                            <Route exact path="/" component={Index}/>
+                            <Route path="/signin" component={Signin}/>
+                            <Route path="/signup" component={Signup}/>  
+                            <Route path="/article/:id" component={Detail}/> 
+                            <Route path="/edit/:id?" component={Edit}/>           
+                            <Route path='*' exact={true} component={NotFind} />
+                        </Switch>
+                        {
+                            msg.type && <Alert type={msg.type} message={msg.text} banner closable onClose={close}/>
+                        }
+                    </div>
+                </Router>
+            </Provider>
         )
     }
 }

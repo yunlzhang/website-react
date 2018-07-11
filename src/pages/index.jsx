@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Pagination } from 'antd';
 import {Link} from 'react-router-dom';
 import {customFetch} from '../assets/js/common';
-import Header from '../components/header';
 import Footer from '../components/footer';
 import Skeleton from '../components/skeleton';
 import { autobind } from 'core-decorators';
@@ -73,7 +72,6 @@ class Index extends Component{
 
         return (
             <div>
-                <Header/>
                 <div className="main-wrap">
                     <ul className="article-lists">
                         {
