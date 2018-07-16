@@ -1,0 +1,64 @@
+.custom-draft-editor{
+    width:960px;
+    margin:80px auto 0;  
+    font-size:16px;
+    .editor-bar{
+        border-top:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        padding:5px 0;
+        .editor-control{
+            float:left;
+            cursor: pointer;
+            width:30px;
+            height:30px;
+            font-size:16px;
+            text-align: center;
+            border:1px solid transparent;
+            line-height:30px;
+            position: relative;
+            margin-right:10px;
+            &:hover{
+                background:#f8f8f9;
+                border:1px solid #dee0e1;
+                border-radius:2px;
+            }
+        }
+        &::after{
+            display: block;
+            content:'';
+            overflow: hidden;
+            visibility: hidden;
+            opacity: 0;
+            clear: both;
+        }
+    } 
+    .pop{
+        position: fixed;
+        // display: none;
+        top: 50%;
+        left: 50%;
+        height: 30px;
+        padding:0 15px;
+        border-radius: 5px;
+        top: 50%;
+        left: 50%;
+        color:#fff;
+        line-height:30px;
+        text-align: center;
+        transform: translateX(-50%);
+        background:rgba(0,0,0,.9);
+        z-index: 1000;
+        &::after{
+            display: block;
+            content:'';
+            width:0;
+            height:0;
+            border:8px solid transparent;
+            border-bottom:8px solid rgba(0,0,0,.9);
+            position: absolute;
+            top:-16px;
+            left:50%;
+            margin-left:-8px;
+        }
+    }
+}

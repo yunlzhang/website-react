@@ -24,18 +24,18 @@ let fetchUserInfo = () => (dispatch) => {
     })
 }
 
-let loginIn = (data) => dispatch => {
+let loginIn = (payload) => dispatch => {
     dispatch({
         type:types.LOGIN_IN,
-        data
+        payload
     })
 }
 
 
-let loginOut = (data) => dispatch => {
+let loginOut = (payload) => dispatch => {
     dispatch({
         type:types.LOGIN_OUT,
-        data
+        payload
     })
 }
 

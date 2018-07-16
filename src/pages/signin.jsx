@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {customFetch} from '../assets/js/common';
 import {withRouter,Redirect} from 'react-router-dom';
-import { autobind } from 'core-decorators';
 import {loginIn,loginOut} from '../redux/actions/login';
 
-import {connect} from 'react-redux'
 import '../scss/signin.scss';
+
+import { autobind } from 'core-decorators';
+import {connect} from 'react-redux'
 
 const mapStateToProps = state => {
     return state;
