@@ -86,9 +86,26 @@ let parseDom = function (str) {
 	　　 return objE.childNodes;
 }
 
+
+let judgePlatform = () => {
+
+
+    let platform = navigator.platform;
+
+    if(platform.indexOf('Mac') === 0){
+        return 'Mac';
+    }else if (platform.indexOf('Win')){
+        return 'Win';
+    }else{
+        return 'Nonmainstream'
+    }
+}
+
+
 export {
     toggleShowReturn,
     customFetch,
     upQiniu,
-    parseDom
+    parseDom,
+    judgePlatform
 }

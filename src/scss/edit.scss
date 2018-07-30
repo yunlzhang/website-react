@@ -2,6 +2,11 @@
     width:960px;
     margin:80px auto 0;  
     font-size:16px;
+    &.hide-placeholder{
+        .public-DraftEditorPlaceholder-root {
+            display: none;
+        }
+    }
     .editor-bar{
         border-top:1px solid #ccc;
         border-bottom:1px solid #ccc;
@@ -22,6 +27,9 @@
                 border:1px solid #dee0e1;
                 border-radius:2px;
             }
+            &.active{
+                color:#0db4f9
+            }
         }
         &::after{
             display: block;
@@ -32,33 +40,8 @@
             clear: both;
         }
     } 
-    .pop{
-        position: fixed;
-        // display: none;
-        top: 50%;
-        left: 50%;
-        height: 30px;
-        padding:0 15px;
-        border-radius: 5px;
-        top: 50%;
-        left: 50%;
-        color:#fff;
-        line-height:30px;
-        text-align: center;
-        transform: translateX(-50%);
-        background:rgba(0,0,0,.9);
-        z-index: 1000;
-        &::after{
-            display: block;
-            content:'';
-            width:0;
-            height:0;
-            border:8px solid transparent;
-            border-bottom:8px solid rgba(0,0,0,.9);
-            position: absolute;
-            top:-16px;
-            left:50%;
-            margin-left:-8px;
-        }
+
+    .editor-content {
+        padding: 20px 0;
     }
 }

@@ -15,16 +15,13 @@ const mapStateToProps = state => {
 @connect(mapStateToProps)
 @autobind
 class Header extends Component {
-    constructor(props){
-        super(props)
-    }
     render() {
         let {loginInfo} = this.props;
         let userInfo = loginInfo.userInfo || {};
         let isloginIn = !!userInfo._id;
         let {path} = this.props.match;
         let active;
-        let hasEditRight = userInfo.right == 1000;
+        let hasEditRight = userInfo.right === 1000;
         switch(path){
             case '/':
                 active = 'index'
@@ -52,7 +49,7 @@ class Header extends Component {
                 {
                     isloginIn ? 
                         <div className="user" >
-                            <span className="avatar" ><img src="userInfo.avatar" alt=""/></span>
+                            <span className="avatar" ><img src={userInfo.avatar} alt=""/></span>
                             {/* <User :userInfo="userInfo" ref="userInfo"></User> */}
                         </div>
                         :
