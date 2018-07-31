@@ -2,15 +2,19 @@ import React,{Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import '../scss/edit.scss';
 
-
-import Editor from '../components/editor'
-import '../assets/css/hint.css'
-
+import CustomEditor from '../components/editor'
 
 class Edit extends Component{
+
+    componentDidMount(){
+        // console.log(this.refs.editor.getHtml())
+    }
+
     render(){
         return (
-            <Editor/>
+            <CustomEditor 
+                ref="editor"
+            />
         )
     }
 }

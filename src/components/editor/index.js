@@ -1,17 +1,19 @@
 import React,{Component} from 'react';
-import {Editor, EditorState,RichUtils,convertToRaw} from 'draft-js';
-import draftToHtml from '../../assets/js/coverttohtml';
+import {Editor, EditorState,RichUtils} from 'draft-js';
 import {resetBlockWithType,addNewBlockAt,getCurrentBlock,generateKeyBind} from './func'
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import {INLINE_BUTTONS,BLOCK_BUTTONS,CONTINUS_BLOCKS,CUSTOM_BUTTONS} from './constant'
 import '../../assets/css/hint.css'
+import './editor.scss';
 
 /* componets */
 
 import ImageButton from './component/image';
-
-
 import customRender from './customrender' ;
+import InsertLink from './component/link';
+import convert2Html from './util/draft2html'; 
+
+
 
 
 const InlineControl = props => {
@@ -37,7 +39,6 @@ const InlineControl = props => {
 
 const BlockControl = props => {
     let {toggleBlockType,editorState} = props;
-    let currentStyle = editorState.getCurrentInlineStyle();
     let selection = editorState.getSelection();
     let blockType = editorState
         .getCurrentContent()
@@ -55,7 +56,6 @@ const BlockControl = props => {
         >{props.icon ? <svg aria-hidden="true" className="icon"><use xlinkHref={'#'+props.icon}></use></svg> : props.label}</button>
 
 }
-
 
 
 
@@ -84,21 +84,20 @@ class CustomEditor extends Component{
         this.blockRendererFn = customRender.call(this,this.onChange, this.getEditorState);
     }
 
+
     componentDidMount(){
-        console.log(this.blockRendererFn)
+
     }
 
+
     onChange = editorState => {
-        console.log(editorState)
         this.setState({editorState});
     }
 
     getHtml = ()=>{
         let editorState = this.state.editorState;
-        const rawContentState = convertToRaw(editorState.getCurrentContent());
-        let result = draftToHtml(
-            rawContentState
-        );
+        let result = convert2Html(editorState.getCurrentContent());
+        console.log(result);
     }
 
     handleKeyCommand = (command, editorState) => {
@@ -178,7 +177,7 @@ class CustomEditor extends Component{
     }
 
     render(){
-        let {popData,editorState}  = this.state;
+        let {editorState}  = this.state;
         let className = 'custom-draft-editor'
         let contentState = editorState.getCurrentContent();
         if (!contentState.hasText()) {
@@ -208,6 +207,7 @@ class CustomEditor extends Component{
                         blockRendererFn={this.blockRendererFn}
                         ref={(ref) => this.editor = ref}
                         onChange={this.onChange} />
+                    <InsertLink/>
                 </div>
             </div>    
         )

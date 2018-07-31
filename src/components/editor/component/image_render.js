@@ -28,8 +28,6 @@ class ImageBlock extends React.Component {
         const { block } = this.props;
         const data = block.getData();
         const src = data.get('src');
-        console.log(data)
-        console.log(src)
         if (src) {
             return (
                 <div>
