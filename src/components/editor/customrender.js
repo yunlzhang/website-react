@@ -12,6 +12,9 @@ export default (setEditorState, getEditorState) => (contentBlock) => {
                     getEditorState,
                 },
             };
+        // case 'LINK':
+        //     console.log('hhhhhh')
+        // break;
         default: return null;
     }
 };

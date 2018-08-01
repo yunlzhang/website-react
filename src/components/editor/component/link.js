@@ -1,62 +1,47 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-function IsURL(str_url){
-    let reg = /(http|https):\/\/.+/g
-    if (reg.test(str_url)){
-        return true;
-    }else{
-        return false;
-    }
-}
+import { generateKeyBind } from '../func';
 
-class InsertLink extends Component{
+export default class LinkButton extends Component{
 
     constructor(){
         super();
         this.state = {
-            linkText:'',
-            linkValue:'',
             isActive:false
         }
     }
 
-    onInput = (e) => {
-        let type = e.target.getAttribute('data-type');
-        if(type === 'text'){
-            this.setState({
-                linkText:e.target.value
-            })
-        }else{
-            this.setState({
-                linkAddress:e.target.value,
-                isActive:IsURL(e.target.value)
-            })
-        }        
+
+    onClick = () => {
+        let {setLinkData,getEditorState} = this.props;
+
+        let editorState = getEditorState();
+        let selectionState = editorState.getSelection();
+        let anchorKey = selectionState.getAnchorKey();
+        let currentContent = editorState.getCurrentContent();
+        let currentContentBlock = currentContent.getBlockForKey(anchorKey);
+        let start = selectionState.getStartOffset();
+        let end = selectionState.getEndOffset();
+        let selectedText = currentContentBlock.getText().slice(start, end);
+
+        setLinkData({
+            isShow:true,
+            linkText:selectedText
+        })   
     }
 
-    render(){
 
-        return (
-            <div className="insert-link-wrap">
-                <div className="insert-link-inner">
-                    <span className="close">&times;</span>
-                    <h3>插入链接</h3>
-                    <div className="link-text">
-                        链接内容:
-                        <input type="text" data-type="text" onInput={this.onInput}/>
-                    </div>
-                    <div className="link-address">
-                        链接地址:
-                        <input type="text" data-type="value" onInput={this.onInput}/>
-                    </div>
-                    <div className="buttons">
-                        <div className="cancel btn">取消</div>
-                        <div className={`confirm btn ${this.state.isActive ? 'active' : ''}`}>确认</div>
-                    </div>
-                </div>
-            </div>
+    render(){
+        let {label} = this.props;
+        return(
+            <button
+                className={`editor-control hint--top ${this.state.isActive ? 'active' : ''}`}
+                type="button"
+                onClick={this.onClick}
+                aria-label={label+`(${generateKeyBind(this.props)})`}
+            > 
+                <svg aria-hidden="true" className="icon"><use xlinkHref='#icon-link'></use></svg>
+            </button>
         )
     }
 }
-
-export default InsertLink;

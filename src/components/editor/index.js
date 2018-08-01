@@ -1,103 +1,53 @@
 import React,{Component} from 'react';
-import {Editor, EditorState,RichUtils} from 'draft-js';
-import {resetBlockWithType,addNewBlockAt,getCurrentBlock,generateKeyBind} from './func'
+import {Editor,RichUtils,CompositeDecorator} from 'draft-js';
+import {resetBlockWithType,addNewBlockAt,getCurrentBlock,createEditorState,findLinkEntities} from './func'
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
-import {INLINE_BUTTONS,BLOCK_BUTTONS,CONTINUS_BLOCKS,CUSTOM_BUTTONS} from './constant'
+import {CONTINUS_BLOCKS} from './constant'
 import '../../assets/css/hint.css'
 import './editor.scss';
 
 /* componets */
-
-import ImageButton from './component/image';
+import EditorBar from './bar';
 import customRender from './customrender' ;
-import InsertLink from './component/link';
+import InsertLink from './component/link_edit';
+import Link from './component/link_render';
+/* end */
+
 import convert2Html from './util/draft2html'; 
 
-
-
-
-const InlineControl = props => {
-    let {toggleInlineStyle,editorState} = props;
-    /* eslint-disable no-unused-vars */
-    let currentStyle = editorState.getCurrentInlineStyle();
-    
-    return <button 
-        className={`editor-control hint--top editor-${props.label} ${currentStyle.has(props.style) ? 'active' :''}` } 
-        aria-label={props.label+`(${generateKeyBind(props)})`}
-        onMouseDown={
-            (e) => {
-                e.preventDefault();
-                toggleInlineStyle(props.style);
-            }
-        }
-        >{props.icon ? <svg aria-hidden="true" className="icon"><use xlinkHref={'#'+props.icon}></use></svg> : props.label}</button>
-
-}
-
-
-
-
-const BlockControl = props => {
-    let {toggleBlockType,editorState} = props;
-    let selection = editorState.getSelection();
-    let blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-    return <button 
-        className={`editor-control hint--top editor-${props.label} ${props.style === blockType ? 'active' :''}` } 
-        aria-label={props.label+`(${generateKeyBind(props)})`}
-        onMouseDown={
-            (e) => {
-                e.preventDefault();
-                toggleBlockType(props.style);
-            }
-        }
-        >{props.icon ? <svg aria-hidden="true" className="icon"><use xlinkHref={'#'+props.icon}></use></svg> : props.label}</button>
-
-}
-
-
-
-const EditorBar = (props) => {
-    return (
-        <div>
-            {INLINE_BUTTONS.map((item,index) => {
-                return <InlineControl key={index} {...Object.assign({},props,item)}/>
-            })}
-            {BLOCK_BUTTONS.map((item,index) => {
-                return <BlockControl key={index} {...Object.assign({},props,item)}/>
-            })}
-            <ImageButton {...Object.assign({},CUSTOM_BUTTONS.IMAGE,props)}/>
-        </div>
-    )
-}
+const linkDecorator = new CompositeDecorator([
+    {
+      strategy: findLinkEntities,
+      component: Link,
+    },
+  ]);
 
 
 class CustomEditor extends Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props);
         this.state = {
-            editorState: EditorState.createEmpty(),
-            popData:{}
+            editorState: createEditorState(this.props.article || '',linkDecorator),
+            linkData:{
+                linkText:'',
+                linkAddress:'',
+                isShow:false
+            }
         };
         this.blockRendererFn = customRender.call(this,this.onChange, this.getEditorState);
     }
 
-
-    componentDidMount(){
-
-    }
-
-
-    onChange = editorState => {
-        this.setState({editorState});
+    onChange = (editorState,callback)=> {
+        console.log(editorState)
+        this.setState({editorState},()=>{
+            typeof callback === 'function' && callback();
+        });
     }
 
     getHtml = ()=>{
         let editorState = this.state.editorState;
         let result = convert2Html(editorState.getCurrentContent());
-        console.log(result);
+        console.log(result)
     }
 
     handleKeyCommand = (command, editorState) => {
@@ -137,10 +87,6 @@ class CustomEditor extends Component{
             const currentBlock = getCurrentBlock(editorState);
             const blockType = currentBlock.getType();
     
-        //   if (blockType.indexOf(Block.ATOMIC) === 0) {
-        //     this.onChange(addNewBlockAt(editorState, currentBlock.getKey()));
-        //     return HANDLED;
-        //   }
             if (currentBlock.getLength() === 0) {
                 switch (blockType) {
                     case 'header-one':
@@ -150,7 +96,7 @@ class CustomEditor extends Component{
                     case 'blockquote':
                     case 'unordered-list-item':
                     case 'ordered-list-item':
-                    case 'code':
+                    case 'code-block':
                         this.onChange(resetBlockWithType(editorState, 'unstyled'));
                         return 'handled';
                     default:
@@ -176,8 +122,14 @@ class CustomEditor extends Component{
         return this.state.editorState;
     }
 
+    setLinkData = (data) => {
+        this.setState({
+            linkData:Object.assign({},this.state.linkData,data)
+        })
+    }
+
     render(){
-        let {editorState}  = this.state;
+        let {editorState,linkData}  = this.state;
         let className = 'custom-draft-editor'
         let contentState = editorState.getCurrentContent();
         if (!contentState.hasText()) {
@@ -192,11 +144,10 @@ class CustomEditor extends Component{
                     toggleInlineStyle={this.toggleInlineStyle} 
                     toggleBlockType={this.toggleBlockType}
                     setEditorState={this.onChange}
+                    setLinkData={this.setLinkData}
                     getEditorState = {this.getEditorState}
+                    editor={this.editor} 
                     editorState={editorState}></EditorBar>
-                    <span className="save" onClick={()=>{
-                        this.getHtml();
-                    }}>保存</span>
                 </div>
                 <div className="editor-content">
                     <Editor 
@@ -207,7 +158,11 @@ class CustomEditor extends Component{
                         blockRendererFn={this.blockRendererFn}
                         ref={(ref) => this.editor = ref}
                         onChange={this.onChange} />
-                    <InsertLink/>
+                    <InsertLink 
+                        setEditorState={this.onChange}
+                        getEditorState = {this.getEditorState}
+                        setLinkData={this.setLinkData}
+                        linkData={linkData} />
                 </div>
             </div>    
         )

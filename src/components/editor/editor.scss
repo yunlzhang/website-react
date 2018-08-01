@@ -71,9 +71,11 @@
             margin:20px 0;
             padding:0 10px;
             border-radius: 2px;
+            display: flex;
             overflow: hidden;
             input{
                 padding-left:10px;
+                flex:1;
             }
         }
 

@@ -1,4 +1,4 @@
-import {EditorState,ContentBlock,genKey} from 'draft-js';
+import {EditorState,ContentBlock,ContentState,convertFromRaw,genKey} from 'draft-js';
 import { Map, List } from 'immutable';
 import {judgePlatform} from '../../assets/js/common'
 
@@ -115,3 +115,32 @@ export const generateKeyBind = (props) =>{
     }
     return extraText;
 }
+
+export const createEditorState = (content = null, decorators) => {
+    if (content === null) {
+        return EditorState.createEmpty(decorators);
+    }
+    let contentState = null;
+    if (typeof content === 'string') {
+        contentState = ContentState.createFromText(content);
+    } else {
+        contentState = convertFromRaw(content);
+    }
+    return EditorState.createWithContent(contentState, decorators);
+};
+
+
+export const findLinkEntities = (contentBlock, callback, contentState) => {
+    contentBlock.findEntityRanges((character) => {
+            const entityKey = character.getEntity();
+            return (
+            entityKey !== null &&
+            contentState.getEntity(entityKey).getType() === 'LINK'
+            );
+        },
+        callback
+    );
+};
+  
+
+  
