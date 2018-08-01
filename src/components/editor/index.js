@@ -38,7 +38,6 @@ class CustomEditor extends Component{
     }
 
     onChange = (editorState,callback)=> {
-        console.log(editorState)
         this.setState({editorState},()=>{
             typeof callback === 'function' && callback();
         });
@@ -162,6 +161,7 @@ class CustomEditor extends Component{
                         setEditorState={this.onChange}
                         getEditorState = {this.getEditorState}
                         setLinkData={this.setLinkData}
+                        editor={this.editor} 
                         linkData={linkData} />
                 </div>
             </div>    

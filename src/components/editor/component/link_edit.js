@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {EditorState,RichUtils} from 'draft-js';
+import {EditorState,RichUtils,Modifier} from 'draft-js';
 function IsURL(str_url){
     let reg = /(http|https):\/\/.+/g
     if (reg.test(str_url)){
@@ -47,21 +47,38 @@ class InsertLink extends Component{
 
 
     confirm = ()=>{
-        let linkData = this.props.linkData;
-
-
-        // // if(!this.state.isActive) return;
-        let {getEditorState,setEditorState} = this.props;
-        const editorState = getEditorState();
-        const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
+        if(!this.state.isActive) return;
+        let {getEditorState,setEditorState,linkData,setLinkData,editor} = this.props;
+        let editorState = getEditorState();
+        let selection = editorState.getSelection();
+        let contentState = editorState.getCurrentContent();
+        let contentStateWithEntity = contentState.createEntity(
             'LINK',
             'MUTABLE',
-            {url: linkData.linkAddress}
+            {url: linkData.linkAddress},
+
         );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        setEditorState(RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey))
+        let entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        let newEditorState;
+        if(selection.isCollapsed()){//选区没内容
+            newEditorState = EditorState.set(editorState, { currentContent: Modifier.replaceText(
+                contentState,
+                selection,
+                `${linkData.linkText || linkData.linkAddress}`,
+                editorState.getCurrentInlineStyle(),
+                entityKey,
+            )});
+        }else{
+            newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+        }
+        setEditorState(RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey),()=>{
+            setLinkData({
+                linkText:'',
+                linkAddress:'',
+                isShow:false
+            })
+            editor && editor.focus();
+        });
     }
 
     render(){
