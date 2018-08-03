@@ -108,7 +108,7 @@ class CustomEditor extends Component{
             if (selection.isCollapsed() && currentBlock.getLength() === selection.getStartOffset()) {
                 if (CONTINUS_BLOCKS.indexOf(blockType) < 0) {
                     this.onChange(addNewBlockAt(editorState, currentBlock.getKey()));
-                return 'handled';
+                    return 'handled';
                 }
                 return 'not-handled';
             }

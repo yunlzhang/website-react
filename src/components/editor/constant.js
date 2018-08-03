@@ -85,7 +85,7 @@ const CONTINUS_BLOCKS = [
     'blockquote',
     'unordered-list-item',
     'ordered-list-item',
-    'code'
+    'code-block'
 ]
 
 const CUSTOM_BUTTONS = {
